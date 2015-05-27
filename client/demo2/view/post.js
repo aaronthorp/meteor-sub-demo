@@ -12,6 +12,8 @@ Template.demo2_post.onCreated(function() {
   instance.autorun(function() {
     var post = Posts.findOne();
     instance.view.parentView.dataVar.set(post);
+    instance.currentData = post;
+    instance.data = post;
   });
 
 });

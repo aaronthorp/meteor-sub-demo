@@ -5,6 +5,8 @@ Template.demo2_posts.onCreated(function() {
   instance.autorun(function() {
     var post = Posts.find();
     instance.view.parentView.dataVar.set(post);
+    instance.currentData = post;
+    instance.data = post;
   });
 
 });
