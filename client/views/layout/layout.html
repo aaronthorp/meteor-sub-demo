@@ -1,0 +1,41 @@
+<template name="layout">
+
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="{{pathFor 'index'}}" class="brand-logo">Subscription Demo</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="{{pathFor 'demo1_source'}}">Router Demo</a></li>
+        <li><a href="{{pathFor 'demo2_source'}}">Template Demo</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  {{> yield}}
+
+  <footer class="page-footer orange">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Aaron Thorp</h5>
+          <p class="grey-text text-lighten-4">JavaScript, Node.JS and Meteor.JS addict, web dev, programmer, consultant, all round problem solver (aka: oRiCLe) - Sydney, Australia</p>
+        </div>
+        <div class="col l3 s12">
+          &nbsp;
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Contact</h5>
+          <ul>
+            <li><a class="white-text" href="mailto:hello@aaronthorp.com">E: hello@aaronthorp.com</a></li>
+            <li><a class="white-text" target="_blank" href="https://twitter.com/AaronThorp">T: @AaronThorp</a></li>
+            <li><a class="white-text" target="_blank" href="http://aaronthorp.com">W: http://aaronthorp.com</a></li>
+            <li><a class="white-text" target="_blank" href="http://thinksoftware.net.au">W: http://thinksoftware.net.au</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      Made by <a class="orange-text text-lighten-3" href="http://aaronthorp.com">Aaron Thorp</a>
+      </div>
+    </div>
+  </footer>
+</template>

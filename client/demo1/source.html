@@ -1,0 +1,112 @@
+<template name="demo1_source">
+
+  <div class="container">
+
+    <h5>Using Iron:Router's waitOn Method</h5>
+
+    <p>When configuring <code class="inline">iron:router</code>, we can setup a <code class="inline">loadingTemplate</code> inside
+      <code class="inline">Router.configure</code> that will be displayed in place of the current template until all
+      the subscriptions for each route are reach the <code class="inline">ready()</code> state.</p>
+
+    {{#prism language="javascript" class="line-numbers"}}
+      Router.configure({
+        layoutTemplate: 'layout',
+        notFoundTemplate: '404',
+        loadingTemplate: 'loading'
+      });
+    {{/prism}}
+
+    <p>A <code class="inline">waitOn</code> function is set on each route returning a single or array of subscriptions
+      retured for that route. The <code class="inline">loading</code> template will then be shown until all subscriptions are ready.</p>
+
+    {{#prism language="javascript" class="line-numbers"}}
+      Router.route("demo1_posts", {
+        path: "/demo1",
+        waitOn: function() {
+          return this.subscribe("posts");
+        }
+      });
+
+      Router.route("demo1_post", {
+        path: "/demo1/:_id",
+        waitOn: function() {
+          return [
+            this.subscribe("post", this.params._id),
+            this.subscribe("comments", this.params._id)
+          ];
+        }
+      });
+    {{/prism}}
+
+    <p>When the route is navigated to, the layout template formatting will be displayed, however the
+      <code class="inline">yield</code> for the route will display the loading template. After the
+      subscriptions are complete, the route's template will show with the data.</p>
+
+    <p>A template helper called <code class="inline">posts</code> has been configured to return a <code class="inline">Posts.find()</code> for all the posts that
+      have been returned by the subscription, and a simple <code class="inline">#each</code> loop to display them in a list.</p>
+
+    {{#prism language="blaze"}}
+      #each posts
+        <li class="collection-item"><div>{{title}}<a href="{{pathFor 'demo1_post'}}" class="secondary-content"><i class="mdi-content-send"></i></a></div></li>
+      else
+        <li class="collection-item"><em>No Posts to display</em></li>
+      /each
+    {{/prism}}
+
+    <blockquote>NOTE: There is no delay set for the single <code class="inline">post</code> subscription so compared
+      to the <code class="inline">posts</code> with a 2000ms delay and <code class="inline">comments</code> with a 3000ms
+      delay, it should return the post details instantly upon loading the single post page.</blockquote>
+
+    <h5>Session Reactivity</h5>
+
+    <p>In this example, we want the user to be able to add a comment to a post by displaying a text box and submit buttons when the user
+      clicks the "Add Comment" link. To do this we would commonly use a <code class="inline">Session</code> variable to define the current state.</p>
+
+    <p>As the session variable is global to the client browsing instance, we would need to clear the session variable each time the page is loaded,
+      otherwise the add comment option will be open every time if the user clicks it once and doesnt close it.</p>
+
+    {{#prism language="javascript" class="line-numbers"}}
+      Router.route("demo1_post", {
+        ...
+        onBeforeAction: function() {
+          Session.set("postAddNewComment", false);
+          this.next();
+        }
+      });
+    {{/prism}}
+
+    <p>Then the session variable is set and unset using events on the tempalte.</p>
+
+    {{#prism language="javascript" class="line-numbers"}}
+      Template.demo1_post.events({
+        "click #addComment": function(event, instance) {
+          Session.set("postAddNewComment", true);
+        },
+        "click #saveComment": function(event, instance) {
+          // do comment save stuff here...
+          Session.set("postAddNewComment", false);
+        },
+        "click #cancelComment": function(event, instance) {
+          Session.set("postAddNewComment", false);
+        }
+      });
+    {{/prism}}
+
+    <p>and the reactive session variable is accessed using a helper <code class="inline">isAddComment</code> defined on the tempalte also.</p>
+
+    {{#prism language="javascript" class="line-numbers"}}
+      Template.demo1_post.helpers({
+        ...
+        isAddComment: function() {
+          return Session.get("postAddNewComment");
+        }
+      });
+    {{/prism}}
+
+    <div class="center">
+      <a href="{{pathFor 'demo1_posts'}}" id="download-button" class="btn-large waves-effect waves-light green">Run Demo</a>
+    </div>
+
+  </div>
+
+</template>

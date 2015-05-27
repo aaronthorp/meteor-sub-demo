@@ -1,0 +1,12 @@
+<template name="demo1_posts">
+<div class="container">
+  <ul class="collection with-header">
+     <li class="collection-header"><h4>Posts</h4></li>
+    {{#each posts}}
+      <li class="collection-item"><div>{{title}}<a href="{{pathFor 'demo1_post'}}" class="secondary-content"><i class="mdi-content-send"></i></a></div></li>
+    {{else}}
+      <li class="collection-item"><em>No Posts to display</em></li>
+    {{/each}}
+   </ul>
+</div>
+</template>

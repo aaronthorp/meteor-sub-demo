@@ -1,0 +1,103 @@
+<template name="demo2_source">
+
+  <div class="container">
+
+    <h5>Using Template Level Subscription Method</h5>
+
+    <p><code class="inline">iron:router</code> now only needs to work as a page location method and can easily be replaced by another
+      routing package or custom code.</p>
+
+    {{#prism language="javascript" class="line-numbers"}}
+      Router.route("demo2_posts", {
+        path: "/demo2"
+      });
+
+      Router.route("demo2_post", {
+        path: "/demo2/:_id"
+      });
+    {{/prism}}
+
+    <p>The hard work is now done on the creation of each template assigning the subscription
+      and any other reactive variables specific to the template</p>
+
+    {{#prism language="javascript" class="line-numbers"}}
+      Template.demo2_posts.onCreated(function() {
+        var instance = this;
+        instance.subscribe("posts");
+      });
+    {{/prism}}
+
+    <p>With <code class="inline">iron:router</code> we could access the parameters from the route by using <code class="inline">this.params.?</code> in the
+      <code class="inline">waitOn</code> function. In a Template level subscription that requires a route paramer, it can be accessed
+      using <code class="inline">Router.current().params</code>.</p>
+
+    {{#prism language="javascript" class="line-numbers"}}
+      Template.demo2_post.onCreated(function() {
+        var instance = this;
+        var params = Router.current().params;
+
+        instance.subscribe("post", params._id);
+      });
+    {{/prism}}
+
+    <blockquote>NOTE: There is no delay set for the single <code class="inline">post</code> subscription so compared
+      to the <code class="inline">posts</code> with a 2000ms delay and <code class="inline">comments</code> with a 3000ms
+      delay, it should return the post details instantly upon loading the single post page.</blockquote>
+
+    <h5>Template "ReactiveVar" Reactivity</h5>
+
+    <p>In this example, we want the user to be able to add a comment to a post by displaying a text box and submit buttons when the user
+      clicks the "Add Comment" link. In this example, we will use a locally defined <code class="inline">ReactiveVar</code> on the template
+      to manage the state of the comment function.</p>
+
+    <p>In the <code class="inline">onCreated function</code>, we can define a new <code class="inline">ReactiveVar</code> called <code class="inline">add</code> for this template attached to its instance.</p>
+
+    {{#prism language="javascript" class="line-numbers"}}
+      Template.demo2_post.onCreated(function() {
+        var instance = this;
+        instance.add = new ReactiveVar(false);
+      });
+    {{/prism}}
+
+    <p>The events etc, are very similar to a Session variable, however they point to the locally declared
+    variable instead of the global session variable.</p>
+
+    {{#prism language="javascript" class="line-numbers"}}
+      Template.demo2_post.events({
+        "click #addComment": function(event, instance) {
+          instance.add.set(true);
+        },
+        "click #saveComment": function(event, instance) {
+          // do comment save stuff here...
+          instance.add.set(false);
+        },
+        "click #cancelComment": function(event, instance) {
+          instance.add.set(false);
+        }
+      });
+    {{/prism}}
+
+    <p>The helper for the variable is similar also.</p>
+
+    {{#prism language="javascript" class="line-numbers"}}
+      Template.demo1_post.helpers({
+        ...
+        isAddComment: function() {
+          var instance = Template.instance();
+          return instance.add.get();
+        }
+      });
+    {{/prism}}
+
+    <p>This will allow you to better control your events on templates, allow multiple
+      templates that might otherwise overlap some session variables work together and
+      prevent a level of tampering in the console from playing with Session variables
+      <em>(although they could be accessed, there is now an added level of difficulty to find them)</em></p>
+
+    <div class="center">
+      <a href="{{pathFor 'demo2_posts'}}" id="download-button" class="btn-large waves-effect waves-light green">Run Demo</a>
+    </div>
+
+  </div>
+
+</template>

@@ -1,0 +1,41 @@
+<template name="demo2_post">
+  <div class="container">
+    <br><br>
+    <a href="{{pathFor 'demo2_posts'}}" id="download-button" class="btn-large waves-effect waves-light orange">Back to Posts</a>
+    {{#if isReady "post"}}
+      {{#with post}}
+        <h3>{{title}}</h3>
+        <p>{{body}}</p>
+        <p><small>By: <em>{{user.name}}</em></small></p>
+      {{/with}}
+    {{else}}
+      <p>Loading Post...</p>
+    {{/if}}
+
+    <hr width="300" />
+
+    <h5>Comments</h5>
+    {{#if isAddComment}}
+      <input type="text" placeholder="Enter Comment" />
+      <a href="#" id="saveComment">Save</a> |
+      <a href="#" id="cancelComment">Cancel</a>
+    {{else}}
+      <a href="#" id="addComment">Add Comment</a>
+    {{/if}}
+
+    {{#if isReady "comments"}}
+      {{#each comments}}
+        <p>{{comment}}<br />
+        <small>By: <em>{{user.name}}</em></small></p>
+        <hr />
+      {{/each}}
+    {{else}}
+      <p>Loading Comments...</p>
+    {{/if}}
+
+    <br><br>
+    <a href="{{pathFor 'demo2_posts'}}" id="download-button" class="btn-large waves-effect waves-light orange">Back to Posts</a>
+
+  </div>
+
+</template>
