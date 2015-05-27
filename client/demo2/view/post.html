@@ -3,11 +3,9 @@
     <br><br>
     <a href="{{pathFor 'demo2_posts'}}" id="download-button" class="btn-large waves-effect waves-light orange">Back to Posts</a>
     {{#if isReady "post"}}
-      {{#with post}}
-        <h3>{{title}}</h3>
-        <p>{{body}}</p>
-        <p><small>By: <em>{{user.name}}</em></small></p>
-      {{/with}}
+      <h3>{{title}}</h3>
+      <p>{{body}}</p>
+      <p><small>By: <em>{{user.name}}</em></small></p>
     {{else}}
       <p>Loading Post...</p>
     {{/if}}
